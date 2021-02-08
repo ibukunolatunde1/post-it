@@ -59,12 +59,13 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-const DB_URL = 'mongodb://127.0.0.1:27017/bakeri';
+const DB_URL = 'mongodb://localhost:27017/test';
+const DB_URL1 = 'mongodb://admin:password@localhost:27017/postit';
 const DB_URL2 = 'mongodb+srv://maximilian:9u4biljMQc4jjqbe@cluster0-ntrwp.mongodb.net/messages?retryWrites=true'
 
 mongoose
   .connect(
-    DB_URL
+    process.env.DB_URL
   )
   .then(result => {
     app.listen(8080);
