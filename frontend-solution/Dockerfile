@@ -12,10 +12,7 @@ RUN npm ci --only=production
 FROM node:lts-alpine
 
 ENV NODE_ENV production
- 
-ENV DB_URL mongodb://admin:password@mongodb:27017/test?authSource=admin
 
-ENV SECRET somesupersecret
 #Add other envs
 
 USER node
