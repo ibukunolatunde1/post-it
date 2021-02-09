@@ -13,6 +13,8 @@ FROM node:lts-alpine
 
 ENV NODE_ENV production
 
+ENV BACKEND_URL backend
+
 #Add other envs
 
 USER node
