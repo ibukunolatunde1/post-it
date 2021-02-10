@@ -3,24 +3,24 @@ FROM node:12 as build
 
 WORKDIR /usr/src/app
 
-COPY package*.json /usr/src/app
+COPY package*.json /usr/src/app/
+
+COPY . .
 
 RUN npm ci --only=production
 
+RUN npm run build
+
 #Production Stage
 
-FROM node:lts-alpine
+FROM node:12-alpine
 
 ENV NODE_ENV production
 
-#Add other envs
+WORKDIR /usr/src/app/
 
-USER node
+RUN npm install -g serve
 
-WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/build/ /usr/src/app/build/
 
-COPY --chown=node:node --from=build /usr/src/app/node_modules /usr/src/app/node_modules
-
-COPY --chown=node:node . /usr/src/app
-
-CMD ["npm", "start"]
+CMD ["serve", "-s", "build"]
