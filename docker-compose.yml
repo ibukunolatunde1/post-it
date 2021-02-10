@@ -1,0 +1,57 @@
+version: '3'
+
+services: 
+
+  backend:
+    build:
+      context: ./backend-solution
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:8080
+    env_file: .env
+    depends_on: 
+      - mongodb
+    restart: always
+    networks: 
+      - mongo-network
+    volumes: 
+      - backend-data:/usr/src/app/images
+
+  frontend:
+    build:
+      context: ./frontend-solution
+      dockerfile: Dockerfile
+    ports: 
+      - 3000:3000
+    env_file: .env
+    restart: always
+    depends_on: 
+      - backend
+
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    env_file: db.env
+    restart: always
+    volumes: 
+      - mongo-data:/data/db
+    networks: 
+      - mongo-network
+
+  mongo-express:
+    image: mongo-express
+    ports: 
+      - 8081:8081
+    env_file: mongo-express.env
+    restart: always
+    networks: 
+      - mongo-network
+    depends_on: 
+      - mongodb
+volumes: 
+  mongo-data:
+    driver: local
+
+networks: 
+  mongo-network:
